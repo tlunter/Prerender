@@ -29,7 +29,7 @@ module Prerender
         r.get key
       else
         c.visit(link.to_s)
-        sleep(0.12)
+        sleep(0.5)
         c.body.tap do |b|
           puts "Setting #{key}"
           r.set key, b

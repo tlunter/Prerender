@@ -25,14 +25,11 @@ class Prerender < Sinatra::Application
     key = "prerender:#{link.host}:#{md5sum}"
 
     if r.exists key
-      return (r.get key).tap do |b|
-        puts b
-        puts "Getting"
-      end
+      r.get key
     else
       c.visit(link.to_s)
       sleep(0.12)
-      return c.body.tap do |b|
+      c.body.tap do |b|
         puts "Setting #{key}"
         r.set key, b
       end

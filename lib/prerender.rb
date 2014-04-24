@@ -1,11 +1,11 @@
 require 'uri'
 require 'sinatra'
 require 'capybara'
-require 'capybara/webkit'
+require 'capybara/poltergeist'
 require 'pry'
 
 class Prerender < Sinatra::Application
-  c = Capybara::Session.new(:webkit)
+  c = Capybara::Session.new(:poltergeist)
   get '/' do
     unparsed_uri = params["url"] || ""
     begin

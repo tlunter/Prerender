@@ -26,13 +26,13 @@ module Prerender
       key = "prerender:#{link.host}:#{md5sum}"
 
       if r.exists key
-        r.get key
+        r.hget key, :body
       else
         c.visit(link.to_s)
         sleep(0.5)
         c.body.tap do |b|
           puts "Setting #{key}"
-          r.set key, b
+          r.hmset key, :uri, link.to_s, :body, b
         end
       end
     end

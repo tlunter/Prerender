@@ -1,0 +1,18 @@
+[Unit]
+Description=Foreman
+After=syslog.target
+
+[Service]
+User=tlunter
+WorkingDirectory=/opt/tlunter/prerender
+Environment=RACK_ENV=production
+ExecStart=/bin/bash -lc "bundle exec foreman start"
+Restart=always
+StandardInput=null
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=%n
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

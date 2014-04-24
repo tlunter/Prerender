@@ -1,15 +1,41 @@
 require 'uri'
+require 'digest'
+
 require 'sinatra'
 require 'capybara'
 require 'capybara/poltergeist'
-require 'pry'
+require 'redis'
 
 class Prerender < Sinatra::Application
   c = Capybara::Session.new(:poltergeist)
-  get %r{/(.*)} do |link|
-    link = link.gsub(/^(http|https):\/(\w+)/, '\1://\2')
-    c.visit(link.to_s)
-    sleep(0.12)
-    c.body
+  r = Redis.new
+
+  get "/favicon.ico" do
+    puts "Trapping favicon request"
+    ""
+  end
+
+  get %r{/(.*)} do |l|
+    l = l.gsub(/^(http|https):\/(\w+)/, '\1://\2')
+    link = URI.parse(l)
+    puts "Got request for #{link.to_s}"
+    md5summer = Digest::MD5.new
+    md5sum = md5summer.hexdigest link.to_s
+
+    key = "prerender:#{link.host}:#{md5sum}"
+
+    if r.exists key
+      return (r.get key).tap do |b|
+        puts b
+        puts "Getting"
+      end
+    else
+      c.visit(link.to_s)
+      sleep(0.12)
+      return c.body.tap do |b|
+        puts "Setting #{key}"
+        r.set key, b
+      end
+    end
   end
 end

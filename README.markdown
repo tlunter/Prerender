@@ -8,7 +8,11 @@ In your Rack application, set up the middleware:
 
     use Rack::Prerender, prerender_service_url: 'http://prerender.example.com'
 
-and then run your Prerender server at that URL.
+and then run your Prerender server at that URL with `unicorn` and `nginx`.
+
+### Requirements
+
+redis
 
 ## How it works
 

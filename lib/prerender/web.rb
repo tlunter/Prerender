@@ -28,8 +28,9 @@ module Prerender
       if r.exists key
         r.hget key, :body
       else
+        puts "Visiting: #{link.to_s}"
         c.visit(link.to_s)
-        sleep(0.5)
+        sleep(2.0)
         c.body.tap do |b|
           puts "Setting #{key}"
           r.hmset key, :uri, link.to_s, :body, b

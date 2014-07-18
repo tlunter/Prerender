@@ -14,7 +14,7 @@ end
 task :record, [:host] do |t, args|
   unless args.host.nil?
     puts "Recording prerenders for #{args.host}"
-    start_search("http://#{args.host}/")
+    start_search("#{args.host}/")
   end
 end
 
